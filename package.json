@@ -1,0 +1,19 @@
+{
+  "name": "bizz_secure",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "This is the demo for the risk assessment system.",
+  "devDependencies": {
+    "cypress": "^14.2.1",
+    "cypress-xpath": "^2.0.1"
+  },
+  "dependencies": {
+    "mailosaur": "^8.8.1"
+  }
+}
