@@ -1,49 +1,46 @@
-import { getVerificationLink } from "../support/mailosaurHelper";
+import { getConfirmationLink } from "../support/mailosaurHelper";
 import 'cypress-xpath';
 
-describe("Signup & Email Verification", () => {
+describe("Email Confirmation Test", () => {
   const serverId = Cypress.env("mailosaurServerId");
   const testEmail = `test${Date.now()}@${serverId}.mailosaur.net`;
 
+  it("should complete signup and confirm email", () => {
+    // Step 1: Sign up
+    cy.visit("https://eaid.bizzsecure.com/", { timeout: 300000 });
 
-  it("Sign up with a dynamic email", () => {
-    cy.visit("https://eaid.bizzsecure.com/", {timeout: 12000});
-    
-    // Check if the element is visible and click on it
-    cy.xpath("//a[normalize-space()='Sign up']", { timeout: 60000 })
-      .should('be.visible') // Assert visibility
-      .click() // Click the element
+    cy.xpath("//a[normalize-space()='Sign up']", { timeout: 80000 })
+      .should("be.visible")
+      .click();
 
-    // Fill in sign-up form
+    // Fill out form
     cy.get("#firstName").type("John");
     cy.get("#lastName").type("Doe");
-    cy.get("#companyName").type("BizzSecure Inc.");
-
-    // Handle Country Code Dropdown
-    cy.get('#contactCountyCode').click() // Open the dropdown
-
-    cy.get('#mat-option-0') // Select option from dropdown
-      .contains('+1')
-      .click()
-
-    cy.get('#contact').type('777-777-7777')
+    cy.get("#companyName").type(`TestCompany${Date.now()}`);
+    cy.get("#contactCountyCode").click();
+    cy.get("#mat-option-0").contains("+1").click();
+    cy.get("#contact").type("777-777-7777");
     cy.get("#email").type(testEmail);
-    cy.log(testEmail);
-
     cy.get("#password").type("Secure@123");
     cy.get("#confirmPassword").type("Secure@123");
-    // Check Compliance Checkbox
-    cy.get('[type="checkbox"]').check() // Ensure checkbox is checked
-    cy.contains('button', 'Create your free account').click()
-  });
+    cy.get('[type="checkbox"]').check();
 
-  it("Verify email via Mailosaur", () => {
+    // Submit form
+    cy.contains("button", "Create your free account").click();
+    
+    // Wait for confirmation page
+    cy.url({ timeout: 30000 }).should("include", "confirmation-required");
 
-    cy.log("Mailosaur API Key:", Cypress.env("mailosaurApiKey")); // Debug Log
-    cy.log("Mailosaur Server ID:", Cypress.env("mailosaurServerId")); // Debug Log
-    getVerificationLink(testEmail).then((verificationLink) => {
-      cy.visit(verificationLink);
-      cy.contains("Email verified").should("be.visible");
+    // Step 2: Get and use confirmation link
+    getConfirmationLink(testEmail).then(link => {
+      cy.log('Extracted confirmation link:', link);
+      
+      // Visit the confirmation link
+      cy.visit(link, { timeout: 30000 });
+      
+      // Verify successful confirmation
+      cy.contains("Email verified successfully", { timeout: 15000 })
+        .should('be.visible');
     });
   });
 });
