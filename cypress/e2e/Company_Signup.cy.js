@@ -1,4 +1,4 @@
-import { getConfirmationLink } from "../support/mailosaurHelper";
+import { getConfirmationLink , getTwoFactorCode  } from "../support/mailosaurHelper";
 import 'cypress-xpath';
 
 describe("Email Confirmation Test", () => {
@@ -42,5 +42,12 @@ describe("Email Confirmation Test", () => {
       cy.contains("Email Confirm Successfully", { timeout: 15000 })
         .should('be.visible');
     });
+
+    // Step 3 : Get and Print the 2FA
+    getTwoFactorCode(testEmail).then(code => {
+    cy.log('Extracted two-factor code:', code);
+   
+    });
+
   });
 });
