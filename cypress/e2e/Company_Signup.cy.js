@@ -45,8 +45,7 @@ describe("Email Confirmation Test", () => {
 
     // Step 3 : Get and Print the 2FA
     getTwoFactorCode(testEmail).then(code => {
-    cy.log('Extracted two-factor code:', code);
-   
+    cy.log('Extracted two-factor code:', code); 
     });
 
   });
