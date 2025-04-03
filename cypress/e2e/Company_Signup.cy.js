@@ -39,7 +39,7 @@ describe("Email Confirmation Test", () => {
       cy.visit(link, { timeout: 30000 });
       
       // Verify successful confirmation
-      cy.contains("Email verified successfully", { timeout: 15000 })
+      cy.contains("Email Confirm Successfully", { timeout: 15000 })
         .should('be.visible');
     });
   });
