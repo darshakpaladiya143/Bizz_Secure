@@ -11,6 +11,7 @@
   "description": "This is the demo for the risk assessment system.",
   "devDependencies": {
     "cypress": "^14.2.1",
+    "cypress-wait-until": "^3.0.2",
     "cypress-xpath": "^2.0.1"
   },
   "dependencies": {

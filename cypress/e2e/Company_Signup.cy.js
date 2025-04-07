@@ -1,5 +1,6 @@
 import { getConfirmationLink , getTwoFactorCode  } from "../support/mailosaurHelper";
 import 'cypress-xpath';
+import 'cypress-wait-until';
 
 describe("Email Confirmation Test & New client account Approved Via System Power Admin", () => {
   const serverId = Cypress.env("mailosaurServerId");
@@ -112,13 +113,18 @@ describe("Email Confirmation Test & New client account Approved Via System Power
       .scrollIntoView()
       .click({ force: true })
       .then(() => {
-  // Wait for toast after action
-    cy.get('.toast-message', { timeout: 10000 })
-      .should('be.visible')
-      .and('contain.text', 'Status updated successfully.');
+    // Use waitUntil to wait for toast to appear
+    cy.waitUntil(() =>
+    cy.get('body').then($body => $body.find('.toast-message').length > 0),
+    {
+    errorMsg: 'Toast message not found!',
+    timeout: 10000,
+    interval: 500
+   });
+   // Final assertion
+    cy.get('.toast-message')
+      .should('contain.text', 'Status updated successfully.');
      });
-    });
-  }); 
-
+   }); 
+ });
 });
-
