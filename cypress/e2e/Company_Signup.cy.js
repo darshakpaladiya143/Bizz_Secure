@@ -121,10 +121,7 @@ describe("Email Confirmation Test & New client account Approved Via System Power
     expect($toggle.find('button')).to.have.attr('aria-checked', 'true');
       });
 
-
     // After approved new company account via power admin try to do login with new account.
-   
-
 
       });
      });
