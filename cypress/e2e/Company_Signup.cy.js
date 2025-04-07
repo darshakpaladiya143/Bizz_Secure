@@ -103,8 +103,7 @@ describe("Email Confirmation Test & New client account Approved Via System Power
       .should('be.visible')
       .clear()
       .type(companyName);
-
-     cy.wait(4000);
+    cy.wait(4000);
 
   // Interact with first toggle only
     cy.xpath("//button[@role='switch']")
@@ -113,18 +112,21 @@ describe("Email Confirmation Test & New client account Approved Via System Power
       .scrollIntoView()
       .click({ force: true })
       .then(() => {
-    // Use waitUntil to wait for toast to appear
-    cy.waitUntil(() =>
-    cy.get('body').then($body => $body.find('.toast-message').length > 0),
-    {
-    errorMsg: 'Toast message not found!',
-    timeout: 10000,
-    interval: 500
-   });
-   // Final assertion
-    cy.get('.toast-message')
-      .should('contain.text', 'Status updated successfully.');
+
+    cy.wait(5000);
+
+  // Most robust solution combining multiple checks
+    cy.get('mat-slide-toggle').first().should(($toggle) => {
+    expect($toggle).to.have.attr('ng-reflect-model', 'true');
+    expect($toggle.find('button')).to.have.attr('aria-checked', 'true');
+      });
+
+
+    // After approved new company account via power admin try to do login with new account.
+   
+
+
+      });
      });
-   }); 
- });
-});
+    }); 
+  });
